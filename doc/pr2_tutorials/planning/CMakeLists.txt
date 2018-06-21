@@ -18,6 +18,10 @@ add_executable(move_group_interface_tutorial src/move_group_interface_tutorial.c
 target_link_libraries(move_group_interface_tutorial ${catkin_LIBRARIES} ${Boost_LIBRARIES})
 install(TARGETS move_group_interface_tutorial DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 
+add_executable(spawn src/spawn.cpp)
+target_link_libraries(spawn ${catkin_LIBRARIES} ${Boost_LIBRARIES})
+install(TARGETS spawn DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+
 install(DIRECTORY launch DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 install(PROGRAMS
   scripts/move_group_python_interface_tutorial.py

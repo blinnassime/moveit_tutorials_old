@@ -1,0 +1,7 @@
+
+<launch>
+
+  <node name="spawn" pkg="moveit_tutorials" type="spawn" respawn="false" output="screen">
+  </node>
+
+</launch>
