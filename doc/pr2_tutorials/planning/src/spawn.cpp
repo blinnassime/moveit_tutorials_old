@@ -79,11 +79,13 @@ int main(int argc, char **argv)
   // MoveIt! operates on sets of joints called "planning groups" and stores them in an object called
   // the `JointModelGroup`. Throughout MoveIt! the terms "planning group" and "joint model group"
   // are used interchangably.
-  static const std::string PLANNING_GROUP = "right_arm";
+  //static const std::string PLANNING_GROUP = "right_arm";
+  static const std::string PLANNING_GROUP = "both_arms";
 
   // The :move_group_interface:`MoveGroup` class can be easily
   // setup using just the name of the planning group you would like to control and plan for.
   moveit::planning_interface::MoveGroupInterface move_group(PLANNING_GROUP);
+  cout << "après set move group\n";
   // Now, we call the planner to compute the plan
   // and visualize it.
   // Note that we are just planning, not asking move_group 
@@ -132,18 +134,57 @@ int main(int argc, char **argv)
   // ^^^^^^^^^^^^^^^^^^^^^^^
   // We can plan a motion for this group to a desired pose for the
   // end-effector.
-  geometry_msgs::Pose target_pose1;
-  target_pose1.orientation.w = 1.0;
-  target_pose1.position.x = 0.28;
-  target_pose1.position.y = -0.7;
-  target_pose1.position.z = 1.0;
-  move_group.setPoseTarget(target_pose1);
+  //geometry_msgs::Pose target_pose_right;
+  //target_pose_right.orientation.w = 1.0;
+  //target_pose_right.position.x = 0.28;
+  //target_pose_right.position.y = -0.7;
+  //target_pose_right.position.z = 1.0;
+  //move_group.setPoseTarget(target_pose_right, "right_wrist");
+  //move_group.setPoseTarget(target_pose_right);
 
+  //geometry_msgs::Pose target_pose_left;
+  //target_pose_left.orientation.w = 0.0;
+  //target_pose_left.position.x = 0.7;
+  //target_pose_left.position.y = 0.9;
+  //target_pose_left.position.z = 0.32;
+  //pose_target.position.x = 0.5+random.uniform(0.0, 0.1);
+  //pose_target.position.y = 0.65+random.uniform(0.0, 0.1);
+  //pose_target.position.z = 0.5+random.uniform(0.0, 0.1);
+  //move_group.setPoseTarget(target_pose_left,"left_wrist");
   // Now, we call the planner to compute the plan and visualize it.
   // Note that we are just planning, not asking move_group
   // to actually move the robot.
   //moveit::planning_interface::MoveGroupInterface::Plan my_plan;
 
+  geometry_msgs::Pose target_pose1;
+  target_pose1.orientation.w = 1.0;
+  target_pose1.position.x = 0.28;
+  target_pose1.position.y = -0.7;
+  target_pose1.position.z = 1.0;  
+
+  geometry_msgs::Pose target_pose2;
+  target_pose2.orientation.w = 1.0;
+  target_pose2.position.x = 0.7;
+  target_pose2.position.y = 0.15;
+  target_pose2.position.z = 1.0;
+
+
+  //moveit::planning_interface::MoveGroup two_arms_group("both_arms");
+  //moveit::planning_interface::MoveGroup two_arms_group("left_arm");
+  //moveit::planning_interface::MoveGroup two_arms_group("right_arm");
+
+
+  //two_arms_group.setPoseTarget(target_pose1, "right_gripper");
+  //two_arms_group.setPoseTarget(target_pose2, "left_gripper");
+  move_group.setPoseTarget(target_pose1, "right_gripper");
+  move_group.setPoseTarget(target_pose2, "left_gripper");
+  
+
+
+    //two_arms_group.setPoseTarget(target_pose2, "left_wrist");
+
+  // peut-être utile
+  //two_arms_group.setPoseTarget(target_pose1);
 
   // Adding/Removing Objects and Attaching/Detaching Objects
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -191,77 +232,79 @@ int main(int argc, char **argv)
 
   // Sleep to allow MoveGroup to recieve and process the collision object message
   ros::Duration(1.0).sleep();
-//*/
+  //*/
 
 
-    //ros::Publisher planning_scene_diff_publisher = nh.advertise<moveit_msgs::PlanningScene>("planning_scene", 1);
-    //while (planning_scene_diff_publisher.getNumSubscribers() < 1)
-    //{
-        //ros::WallDuration sleep_t(0.5);
-        //sleep_t.sleep();
-    //}
-    moveit_msgs::CollisionObject toilet;
-    Eigen::Vector3d scale(0.5,0.5,0.5);
-    shapes::Mesh* m = shapes::createMeshFromResource("file:///home/nblin/ws_moveit/hole_small.dae", scale);
-    shape_msgs::Mesh toilet_mesh;
-    shapes::ShapeMsg toilet_mesh_msg;
-    shapes::constructMsgFromShape(m,toilet_mesh_msg);
-    toilet_mesh = boost::get<shape_msgs::Mesh>(toilet_mesh_msg);
-    toilet.meshes.resize(1);
-    toilet.meshes[0] = toilet_mesh;
-    toilet.mesh_poses.resize(1);
-    toilet.mesh_poses[0].position.x = 0.7;
-    toilet.mesh_poses[0].position.y = -1;
-    toilet.mesh_poses[0].position.z = 0.3+0.05;
-    toilet.mesh_poses[0].orientation.w= 0.921;
-    toilet.mesh_poses[0].orientation.x= 0.0;
-    toilet.mesh_poses[0].orientation.y= 0.0;
-    toilet.mesh_poses[0].orientation.z= -0.389;
-    //pub_co.publish(toilet);
+  //ros::Publisher planning_scene_diff_publisher = nh.advertise<moveit_msgs::PlanningScene>("planning_scene", 1);
+  //while (planning_scene_diff_publisher.getNumSubscribers() < 1)
+  //{
+  //ros::WallDuration sleep_t(0.5);
+  //sleep_t.sleep();
+  //}
+  moveit_msgs::CollisionObject toilet;
+  Eigen::Vector3d scale(0.5,0.5,0.5);
+  shapes::Mesh* m = shapes::createMeshFromResource("file:///home/nblin/ws_moveit/hole_small.dae", scale);
+  shape_msgs::Mesh toilet_mesh;
+  shapes::ShapeMsg toilet_mesh_msg;
+  shapes::constructMsgFromShape(m,toilet_mesh_msg);
+  toilet_mesh = boost::get<shape_msgs::Mesh>(toilet_mesh_msg);
+  toilet.meshes.resize(1);
+  toilet.meshes[0] = toilet_mesh;
+  toilet.mesh_poses.resize(1);
+  toilet.mesh_poses[0].position.x = 0.7;
+  toilet.mesh_poses[0].position.y = -1;
+  toilet.mesh_poses[0].position.z = 0.3+0.05;
+  toilet.mesh_poses[0].orientation.w= 0.921;
+  toilet.mesh_poses[0].orientation.x= 0.0;
+  toilet.mesh_poses[0].orientation.y= 0.0;
+  toilet.mesh_poses[0].orientation.z= -0.389;
+  //pub_co.publish(toilet);
 
-    toilet.meshes.push_back(toilet_mesh);
-    toilet.mesh_poses.push_back(toilet.mesh_poses[0]);
-    toilet.operation = toilet.ADD;
-    
-    //std::vector<moveit_msgs::CollisionObject> collision_objects;  
-    collision_objects.push_back(toilet);  
-    // Now, let's add the collision object into the world
-    ROS_INFO("Add an object into the world");  
-    planning_scene_interface.addCollisionObjects(collision_objects);
+  toilet.meshes.push_back(toilet_mesh);
+  toilet.mesh_poses.push_back(toilet.mesh_poses[0]);
+  toilet.operation = toilet.ADD;
 
-    moveit_msgs::PlanningScene planning_scene;
-    planning_scene.world.collision_objects.push_back(toilet);
-    //planning_scene.is_diff = true;
-    //planning_scene_diff_publisher.publish(planning_scene);
+  //std::vector<moveit_msgs::CollisionObject> collision_objects;  
+  collision_objects.push_back(toilet);  
+  // Now, let's add the collision object into the world
+  ROS_INFO("Add an object into the world");  
+  planning_scene_interface.addCollisionObjects(collision_objects);
 
-    //sleep(2.0);
+  moveit_msgs::PlanningScene planning_scene;
+  planning_scene.world.collision_objects.push_back(toilet);
+  //planning_scene.is_diff = true;
+  //planning_scene_diff_publisher.publish(planning_scene);
 
-    //ros::ServiceClient planning_scene_diff_client =
-        //nh.serviceClient<moveit_msgs::ApplyPlanningScene>("apply_planning_scene");
-    //planning_scene_diff_client.waitForExistence();
+  //sleep(2.0);
 
-    //moveit_msgs::ApplyPlanningScene srv;
-    //srv.request.scene = planning_scene;
-    //planning_scene_diff_client.call(srv);
+  //ros::ServiceClient planning_scene_diff_client =
+  //nh.serviceClient<moveit_msgs::ApplyPlanningScene>("apply_planning_scene");
+  //planning_scene_diff_client.waitForExistence();
 
-
+  //moveit_msgs::ApplyPlanningScene srv;
+  //srv.request.scene = planning_scene;
+  //planning_scene_diff_client.call(srv);
 
 
-    ros::spinOnce();
-    sleep(2.0);
 
 
-    move_group.setPlannerId("CIRRT");
+  ros::spinOnce();
+  sleep(2.0);
+
+
+  move_group.setPlannerId("CIRRT");
     //move_group.setPlannerId("RRTConnectkConfigDefault");
 
 
     //*
   // Now when we plan a trajectory it will avoid the obstacle
   move_group.setStartState(*move_group.getCurrentState());
-  move_group.setPoseTarget(target_pose1);
+  //move_group.setPoseTarget(target_pose1);
   visual_tools.publishText(text_pose, "OUAICHE TAVUObstacle Goal", rvt::WHITE, rvt::XLARGE);
   success = (move_group.plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
- 
+  
+  //moveit::planning_interface::MoveGroup::Plan two_arms_plan;
+  //two_arms_group.plan(two_arms_plan);
  
   ROS_INFO_NAMED("tutorial", "Visualizing plan %s", success ? "" : "FAILED");
 
